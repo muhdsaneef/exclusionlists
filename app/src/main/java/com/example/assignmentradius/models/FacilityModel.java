@@ -4,12 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-import io.realm.annotations.Required;
 
 public class FacilityModel extends RealmObject {
 
-    @PrimaryKey
     @SerializedName("facility_id")
     private int facilityId;
 

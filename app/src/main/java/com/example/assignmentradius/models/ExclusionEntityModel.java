@@ -12,6 +12,14 @@ public class ExclusionEntityModel extends RealmObject {
     @SerializedName("options_id")
     private  int optionsId;
 
+    public ExclusionEntityModel() {
+    }
+
+    public ExclusionEntityModel(int facilityId, int optionId) {
+        this.facilityId = facilityId;
+        this.optionsId = optionId;
+    }
+
     public int getFacilityId() {
         return facilityId;
     }

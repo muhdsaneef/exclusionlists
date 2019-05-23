@@ -13,16 +13,14 @@ import io.realm.annotations.RealmClass;
 import io.realm.annotations.Required;
 
 public class ServerResponse {
-    @SerializedName("facilities")
     private List<Facilities> facilities;
 
-    @SerializedName("exclusions")
-    private List<List<Exclusions>> exclusions;
+    private List<List<ExclusionEntityModel>> exclusions;
 
     public ServerResponse() {
     }
 
-    public ServerResponse(List<Facilities> facilities, List<List<Exclusions>> exclusions) {
+    public ServerResponse(List<Facilities> facilities, List<List<ExclusionEntityModel>> exclusions) {
         this.facilities = facilities;
         this.exclusions = exclusions;
     }
@@ -35,11 +33,11 @@ public class ServerResponse {
         this.facilities = facilities;
     }
 
-    public List<List<Exclusions>> getExclusions() {
+    public List<List<ExclusionEntityModel>> getExclusions() {
         return exclusions;
     }
 
-    public void setExclusions(List<List<Exclusions>> exclusions) {
+    public void setExclusions(List<List<ExclusionEntityModel>> exclusions) {
         this.exclusions = exclusions;
     }
 
@@ -116,26 +114,5 @@ public class ServerResponse {
             }
         }
 
-    }
-
-    public static class Exclusions {
-        @SerializedName("facility_id")
-        private final int facilityId;
-
-        @SerializedName("options_id")
-        private final int optionsId;
-
-        public Exclusions(int facilityId, int optionsId) {
-            this.facilityId = facilityId;
-            this.optionsId = optionsId;
-        }
-
-        public int getFacilityId() {
-            return facilityId;
-        }
-
-        public int getOptionsId() {
-            return optionsId;
-        }
     }
 }

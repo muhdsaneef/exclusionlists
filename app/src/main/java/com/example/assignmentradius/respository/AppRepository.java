@@ -4,11 +4,14 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.example.assignmentradius.api.RetrofitHelper;
+import com.example.assignmentradius.models.ExclusionEntityModel;
+import com.example.assignmentradius.models.Exclusions;
 import com.example.assignmentradius.models.FacilityModel;
 import com.example.assignmentradius.models.OptionModel;
 import com.example.assignmentradius.models.ServerResponse;
 
 import java.util.List;
+import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -56,17 +59,27 @@ public class AppRepository {
     }
 
     private void writeResponseToDatabase(ServerResponse serverResponse) {
+        realm.beginTransaction();
         if(serverResponse.getFacilities() != null && !serverResponse.getFacilities().isEmpty()) {
             for(ServerResponse.Facilities facility : serverResponse.getFacilities()) {
                 // Persist your data in a transaction
-                realm.beginTransaction();
-                FacilityModel facilityModel = realm.createObject(FacilityModel.class);
+                FacilityModel facilityModel = new FacilityModel();
                 facilityModel.setFacilityId(facility.getFacilityId());
                 facilityModel.setName(facility.getName());
                 List<OptionModel> options = facility.getOptions();
                 facilityModel.setOptions(new RealmList<>(options.toArray(new OptionModel[options.size()])));
-                realm.commitTransaction();
+                FacilityModel facilityObject = realm.copyToRealm(facilityModel);
             }
         }
+
+        if(serverResponse.getExclusions() != null && !serverResponse.getExclusions().isEmpty()) {
+            for(List<ExclusionEntityModel> exclusions : serverResponse.getExclusions()) {
+                Exclusions unmanagedExclusion = new Exclusions();
+                unmanagedExclusion.setId(UUID.randomUUID().toString());
+                unmanagedExclusion.setExclusions(new RealmList<>(exclusions.toArray(new ExclusionEntityModel[exclusions.size()])));
+                Exclusions managedExclusions = realm.copyToRealm(unmanagedExclusion);
+            }
+        }
+        realm.commitTransaction();
     }
 }
