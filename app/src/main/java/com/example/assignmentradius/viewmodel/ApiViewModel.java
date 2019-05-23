@@ -15,5 +15,10 @@ public class ApiViewModel extends ViewModel {
             return;
         }
         repository = AppRepository.getInstance();
-        serverResponse = repository.getServerResponse();    }
+        serverResponse = repository.getServerResponse();
+    }
+
+    public MutableLiveData<ServerResponse> getServerResponse() {
+        return serverResponse;
+    }
 }

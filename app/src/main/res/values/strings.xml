@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">AssignmentRadius</string>
+    <string name="app_name">Exclusion Sample</string>
+    <string name="cd_dummy">dummy</string>
 </resources>

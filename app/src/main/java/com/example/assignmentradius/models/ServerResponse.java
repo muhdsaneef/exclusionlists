@@ -51,6 +51,7 @@ public class ServerResponse implements RealmModel{
         @SerializedName("options")
         private final List<Options> options;
 
+
         public Facilities(String facilityId, String name, List<Options> options) {
             this.facilityId = facilityId;
             this.name = name;
@@ -77,9 +78,9 @@ public class ServerResponse implements RealmModel{
             private final String icon;
 
             @SerializedName("id")
-            private final String id;
+            private final int id;
 
-            public Options(String name, String icon, String id) {
+            public Options(String name, String icon, int id) {
                 this.name = name;
                 this.icon = icon;
                 this.id = id;
@@ -93,7 +94,7 @@ public class ServerResponse implements RealmModel{
                 return icon;
             }
 
-            public String getId() {
+            public int getId() {
                 return id;
             }
         }
