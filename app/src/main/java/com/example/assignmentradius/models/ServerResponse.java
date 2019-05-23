@@ -5,44 +5,57 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.RealmList;
 import io.realm.RealmModel;
+import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.RealmClass;
+import io.realm.annotations.Required;
 
-public class ServerResponse implements RealmModel{
+public class ServerResponse extends RealmObject {
     @SerializedName("facilities")
-    private List<Facilities> facilities;
+    private RealmList<Facilities> facilities;
 
     @SerializedName("exclusions")
-    private List<List<Exclusions>> exclusions;
+    private RealmList<RealmList<Exclusions>> exclusions;
 
+    @Required
     @PrimaryKey
     private String id;
 
     public ServerResponse() {
     }
 
-    public ServerResponse(List<Facilities> facilities, List<List<Exclusions>> exclusions) {
+    public ServerResponse(RealmList<Facilities> facilities, RealmList<RealmList<Exclusions>> exclusions) {
         this.facilities = facilities;
         this.exclusions = exclusions;
     }
 
-    public List<Facilities> getFacilities() {
+    public RealmList<Facilities> getFacilities() {
         return facilities;
     }
 
-    public List<List<Exclusions>> getExclusions() {
+    public void setFacilities(RealmList<Facilities> facilities) {
+        this.facilities = facilities;
+    }
+
+    public RealmList<RealmList<Exclusions>> getExclusions() {
         return exclusions;
     }
 
-    public void setFacilities(List<Facilities> facilities) {
-        this.facilities = facilities;
+    public void setExclusions(RealmList<RealmList<Exclusions>> exclusions) {
+        this.exclusions = exclusions;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public static class Facilities implements RealmModel{
+    public static class Facilities extends RealmObject{
         @SerializedName("facility_id")
         private final int facilityId;
 
@@ -87,7 +100,7 @@ public class ServerResponse implements RealmModel{
             }
         }
 
-        public static class Options {
+        public static class Options extends RealmObject{
             @SerializedName("name")
             private final String name;
 
@@ -155,7 +168,8 @@ public class ServerResponse implements RealmModel{
 
     }
 
-    public static class Exclusions {
+    @RealmClass
+    public static class Exclusions implements RealmModel {
         @SerializedName("facility_id")
         private final int facilityId;
 

@@ -12,4 +12,8 @@ public class AppConstants {
     public static final String ICON_SWIMMING = "swimming";
     public static final String ICON_GARDEN = "garden";
     public static final String ICON_GARAGE = "garage";
+
+    //DB
+    public static final String DB_NAME = "demo.realm";
+    public static final int DB_SCHEMA_VERSION = 0;
 }

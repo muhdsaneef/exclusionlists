@@ -17,6 +17,11 @@ import retrofit2.Response;
 public class AppRepository {
 
     private static AppRepository appRepository;
+    private Realm realm;
+
+    private AppRepository() {
+        realm = Realm.getDefaultInstance();
+    }
 
     public static AppRepository getInstance(){
         if (appRepository == null){
@@ -34,6 +39,7 @@ public class AppRepository {
                 if(response.isSuccessful()) {
                     ServerResponse serverResponseBody = response.body();
                     serverResponse.setValue(serverResponseBody);
+                    writeResponseToDatabase(serverResponseBody);
                 } else {
                     serverResponse.setValue(null);
                 }
@@ -45,6 +51,13 @@ public class AppRepository {
             }
         });
         return serverResponse;
+    }
+
+    private void writeResponseToDatabase(ServerResponse serverResponse) {
+        // Persist your data in a transaction
+        realm.beginTransaction();
+        ServerResponse serverResponseObject = realm.copyToRealm(serverResponse); // Create managed objects directly
+        realm.commitTransaction();
     }
 
     public void storeFacilitiesList(final List<ServerResponse.Facilities> facilities) {
