@@ -93,6 +93,7 @@ public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.Vi
                 ServerResponse.Facilities facility = getFacilityById(exclusionObj.getFacilityId());
                 if(facility != null) {
                     facility.disableOption(exclusionObj.getOptionsId());
+                    facility.setFacilityIdOfOptionBlockingFacility(facilityId);
                 }
             }
         }
@@ -107,15 +108,21 @@ public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.Vi
         for(ServerResponse.Exclusions exclusionObj : exclusions) {
             if(facilityId != exclusionObj.getFacilityId()) {
                 ServerResponse.Facilities facility = getFacilityById(exclusionObj.getFacilityId());
-                if(facility != null && !checkForBlockByOtherFacilities(facility.getFacilityId())) {
+                if(facility != null && !checkForBlockByOtherFacilities(facilityId, facility)) {
                     facility.enableAllOptions();
                 }
             }
         }
     }
 
-    private boolean checkForBlockByOtherFacilities(int facilityId) {
-        viewModel.
+    /**
+     *
+     * @param facilityId
+     * @param facility
+     * @return
+     */
+    private boolean checkForBlockByOtherFacilities(int facilityId, ServerResponse.Facilities facility) {
+        return facilityId != facility.getFacilityIdOfOptionBlockingFacility();
     }
 
     /**
@@ -145,5 +152,16 @@ public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.Vi
             }
         }
         return null;
+    }
+
+    private int getDisabledOptionId(ServerResponse.Facilities facility) {
+        int optionId = -1;
+        for(ServerResponse.Facilities.Options option : facility.getOptions()) {
+            if(option.isOptionDisabled()) {
+                optionId = option.getId();
+                break;
+            }
+        }
+        return optionId;
     }
 }

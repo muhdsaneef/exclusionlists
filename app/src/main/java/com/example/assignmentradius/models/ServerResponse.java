@@ -53,6 +53,8 @@ public class ServerResponse implements RealmModel{
 
         private int selectedOption = -1;
 
+        private int facilityIdOfOptionBlockingFacility;
+
         public Facilities(int facilityId, String name, List<Options> options) {
             this.facilityId = facilityId;
             this.name = name;
@@ -69,6 +71,14 @@ public class ServerResponse implements RealmModel{
 
         public List<Options> getOptions() {
             return options;
+        }
+
+        public int getFacilityIdOfOptionBlockingFacility() {
+            return facilityIdOfOptionBlockingFacility;
+        }
+
+        public void setFacilityIdOfOptionBlockingFacility(int facilityIdOfOptionBlockingFacility) {
+            this.facilityIdOfOptionBlockingFacility = facilityIdOfOptionBlockingFacility;
         }
 
         public static class Options {
