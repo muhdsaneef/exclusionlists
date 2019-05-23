@@ -149,15 +149,4 @@ public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.Vi
         }
         return null;
     }
-
-    private int getDisabledOptionId(ServerResponse.Facilities facility) {
-        int optionId = -1;
-        for(ServerResponse.Facilities.Options option : facility.getOptions()) {
-            if(option.isOptionDisabled()) {
-                optionId = option.getId();
-                break;
-            }
-        }
-        return optionId;
-    }
 }

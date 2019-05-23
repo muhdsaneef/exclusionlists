@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.assignmentradius.R;
+import com.example.assignmentradius.models.OptionModel;
 import com.example.assignmentradius.models.ServerResponse;
 import com.example.assignmentradius.utils.AppUtils;
 
@@ -51,7 +52,7 @@ public class CustomChoiceWidget extends LinearLayout {
         this.choiceSelectionListener = choiceSelectionListener;
     }
 
-    public void setChoiceLabels(Context context, List<ServerResponse.Facilities.Options> userOptions, int optionSelected) {
+    public void setChoiceLabels(Context context, List<OptionModel> userOptions, int optionSelected) {
         if(optionsGroup != null && optionsGroup.getChildCount() > 0) {
             optionsGroup.removeAllViews();
         }

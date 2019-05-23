@@ -63,7 +63,7 @@ public class AppRepository {
                 FacilityModel facilityModel = realm.createObject(FacilityModel.class);
                 facilityModel.setFacilityId(facility.getFacilityId());
                 facilityModel.setName(facility.getName());
-                List<ServerResponse.Facilities.Options> options = facility.getOptions();
+                List<OptionModel> options = facility.getOptions();
                 facilityModel.setOptions(new RealmList<>(options.toArray(new OptionModel[options.size()])));
                 realm.commitTransaction();
             }
