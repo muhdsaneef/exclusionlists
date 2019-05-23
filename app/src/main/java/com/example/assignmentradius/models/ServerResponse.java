@@ -43,7 +43,7 @@ public class ServerResponse implements RealmModel{
 
     public static class Facilities implements RealmModel{
         @SerializedName("facility_id")
-        private final String facilityId;
+        private final int facilityId;
 
         @SerializedName("name")
         private final String name;
@@ -51,14 +51,15 @@ public class ServerResponse implements RealmModel{
         @SerializedName("options")
         private final List<Options> options;
 
+        private int selectedOption = -1;
 
-        public Facilities(String facilityId, String name, List<Options> options) {
+        public Facilities(int facilityId, String name, List<Options> options) {
             this.facilityId = facilityId;
             this.name = name;
             this.options = options;
         }
 
-        public String getFacilityId() {
+        public int getFacilityId() {
             return facilityId;
         }
 
@@ -80,6 +81,8 @@ public class ServerResponse implements RealmModel{
             @SerializedName("id")
             private final int id;
 
+            private boolean isOptionDisabled;
+
             public Options(String name, String icon, int id) {
                 this.name = name;
                 this.icon = icon;
@@ -97,26 +100,62 @@ public class ServerResponse implements RealmModel{
             public int getId() {
                 return id;
             }
+
+            public boolean isOptionDisabled() {
+                return isOptionDisabled;
+            }
+
+            public void setOptionDisabled(boolean optionEnabled) {
+                isOptionDisabled = optionEnabled;
+            }
         }
+
+        public int getSelectedOption() {
+            return selectedOption;
+        }
+
+        public void setSelectedOption(int selectedOption) {
+            this.selectedOption = selectedOption;
+        }
+
+        public void enableAllOptions() {
+            if(options != null) {
+                for (Options option : options) {
+                    option.setOptionDisabled(false);
+                }
+            }
+        }
+
+        public void disableOption(int optionID) {
+            if(options != null) {
+                for (Options option : options) {
+                    if(option.getId() == optionID) {
+                        option.setOptionDisabled(true);
+                        break;
+                    }
+                }
+            }
+        }
+
     }
 
     public static class Exclusions {
         @SerializedName("facility_id")
-        private final String facilityId;
+        private final int facilityId;
 
         @SerializedName("options_id")
-        private final String optionsId;
+        private final int optionsId;
 
-        public Exclusions(String facilityId, String optionsId) {
+        public Exclusions(int facilityId, int optionsId) {
             this.facilityId = facilityId;
             this.optionsId = optionsId;
         }
 
-        public String getFacilityId() {
+        public int getFacilityId() {
             return facilityId;
         }
 
-        public String getOptionsId() {
+        public int getOptionsId() {
             return optionsId;
         }
     }

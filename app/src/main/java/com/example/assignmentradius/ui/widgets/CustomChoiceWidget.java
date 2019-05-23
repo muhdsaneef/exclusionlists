@@ -1,7 +1,6 @@
 package com.example.assignmentradius.ui.widgets;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,6 @@ public class CustomChoiceWidget extends LinearLayout {
 
     private RadioGroup optionsGroup;
     private TextView tvChoiceWidget;
-    private int selectedID;
     private ChoiceSelectionListener choiceSelectionListener;
 
     public CustomChoiceWidget(Context context) {
@@ -47,35 +45,35 @@ public class CustomChoiceWidget extends LinearLayout {
         choiceLayout.setLayoutParams(layoutParams);
         addView(choiceLayout);
 
-        initChoiceSelectionListener();
     }
 
     public void setChoiceSelectionListener(ChoiceSelectionListener choiceSelectionListener) {
         this.choiceSelectionListener = choiceSelectionListener;
     }
 
-    private void initChoiceSelectionListener() {
-        optionsGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            if(choiceSelectionListener != null) {
-                RadioButton radioButton = optionsGroup.findViewById(group.getCheckedRadioButtonId());
-                selectedID = radioButton.getId();
-                choiceSelectionListener.onChoiceSelected(selectedID);
-            }
-        });
-    }
-
-    public void setChoiceLabels(Context context, List<ServerResponse.Facilities.Options> userOptions) {
-        int selectedIndex = -1;
+    public void setChoiceLabels(Context context, List<ServerResponse.Facilities.Options> userOptions, int optionSelected) {
+        if(optionsGroup != null && optionsGroup.getChildCount() > 0) {
+            optionsGroup.removeAllViews();
+        }
+        //Create and the option items
         for(int i = 0; i < userOptions.size(); i++) {
             RadioButton radioButton = new RadioButton(context);
+            //Add icon to the button
             radioButton.setCompoundDrawablesWithIntrinsicBounds(AppUtils.getIconResourceId(userOptions.get(i).getIcon()),0,0,0);
             radioButton.setText(userOptions.get(i).getName());
             radioButton.setId(userOptions.get(i).getId());
+            radioButton.setEnabled(!userOptions.get(i).isOptionDisabled());
+            //Check if this option is already selected
+            if(userOptions.get(i).getId() == optionSelected) {
+                radioButton.setChecked(true);
+            }
+            radioButton.setOnClickListener(v -> {
+                if(choiceSelectionListener != null) {
+                    RadioButton radioButton1 = (RadioButton) v;
+                    choiceSelectionListener.onChoiceSelected(radioButton1.getId());
+                }
+            });
             optionsGroup.addView(radioButton);
-        }
-        if(selectedIndex != -1) {
-            RadioButton radioButton = (RadioButton) optionsGroup.getChildAt(selectedIndex);
-            radioButton.setChecked(true);
         }
     }
 

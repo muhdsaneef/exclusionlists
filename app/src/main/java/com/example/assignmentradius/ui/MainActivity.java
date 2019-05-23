@@ -48,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private void setResponseToList(ServerResponse serverResponse) {
         List<ServerResponse.Facilities> facilities = serverResponse.getFacilities();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        FacilitiesAdapter adapter = new FacilitiesAdapter(this, facilities);
+        FacilitiesAdapter adapter = new FacilitiesAdapter(this, facilities, viewModel);
+        adapter.setExclusionsList(serverResponse.getExclusions());
         binding.rvSelectionList.setLayoutManager(layoutManager);
         binding.rvSelectionList.setAdapter(adapter);
     }
