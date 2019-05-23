@@ -73,9 +73,9 @@ public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.Vi
             ServerResponse.Exclusions tempExclusionObj = checkIfFacilityPresentInExclusion(exclusion.getFacilityId(), exclusions);
             if(tempExclusionObj != null) {
                 if(tempExclusionObj.getOptionsId() != exclusion.getOptionsId()) {
-                    enableAllOptions(tempExclusionObj.getFacilityId(), exclusions);
+                    changeStatusOfFacilityOptions(tempExclusionObj.getFacilityId(), exclusions, true);
                 } else {
-                    disableAllExcludedOptions(tempExclusionObj.getFacilityId(), exclusions);
+                    changeStatusOfFacilityOptions(tempExclusionObj.getFacilityId(), exclusions, false);
                 }
             }
         }
@@ -87,48 +87,44 @@ public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.Vi
      * @param facilityId The id of the current selected facility
      * @param exclusions The exclusion list in which the current selected facility is present
      */
-    private void disableAllExcludedOptions(int facilityId, List<ServerResponse.Exclusions> exclusions) {
+    private void changeStatusOfFacilityOptions(int facilityId, List<ServerResponse.Exclusions> exclusions, boolean enableOption) {
         for(ServerResponse.Exclusions exclusionObj : exclusions) {
             if(facilityId != exclusionObj.getFacilityId()) {
                 ServerResponse.Facilities facility = getFacilityById(exclusionObj.getFacilityId());
                 if(facility != null) {
-                    facility.disableOption(exclusionObj.getOptionsId());
-                    facility.setFacilityIdOfOptionBlockingFacility(facilityId);
+                    if(enableOption) {
+                        if(!checkForBlockByOtherFacilities(facilityId, facility)) {
+                            facility.enableAllOptions();
+                        }
+                    } else {
+                        facility.disableOption(exclusionObj.getOptionsId());
+                        facility.addBlockingFacilityId(facilityId);
+                    }
                 }
             }
         }
     }
 
     /**
-     * Enable All options for the facilities other than the current selected facility
-     * @param facilityId The facility id of the current selected facility
-     * @param exclusions The exclusion list in which the current selected facility is present
-     */
-    private void enableAllOptions(int facilityId, List<ServerResponse.Exclusions> exclusions) {
-        for(ServerResponse.Exclusions exclusionObj : exclusions) {
-            if(facilityId != exclusionObj.getFacilityId()) {
-                ServerResponse.Facilities facility = getFacilityById(exclusionObj.getFacilityId());
-                if(facility != null && !checkForBlockByOtherFacilities(facilityId, facility)) {
-                    facility.enableAllOptions();
-                }
-            }
-        }
-    }
-
-    /**
-     *
-     * @param facilityId
-     * @param facility
+     * Check if the options of a facility is blocked by facilities other than the current facility
+     * @param facilityId The id of the current facility
+     * @param facility The facility of which the options should be enabled
      * @return
      */
     private boolean checkForBlockByOtherFacilities(int facilityId, ServerResponse.Facilities facility) {
-        return facilityId != facility.getFacilityIdOfOptionBlockingFacility();
+        List<Integer> blockingFacilityIds = facility.getFacilityIdsOfOptionBlockingFacility();
+        if(blockingFacilityIds != null) {
+            blockingFacilityIds.remove(Integer.valueOf(facilityId));
+            return blockingFacilityIds.size() > 0;
+        } else {
+            return false;
+        }
     }
 
     /**
      * Check if the facility is in exclusion list
-     * @param facilityId
-     * @param tempExclusionsList
+     * @param facilityId The id of the current facility
+     * @param tempExclusionsList The exclusion list which might contain the facility
      * @return
      */
     private ServerResponse.Exclusions checkIfFacilityPresentInExclusion(int facilityId, List<ServerResponse.Exclusions> tempExclusionsList) {

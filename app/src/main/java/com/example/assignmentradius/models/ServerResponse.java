@@ -2,6 +2,7 @@ package com.example.assignmentradius.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.RealmModel;
@@ -53,7 +54,7 @@ public class ServerResponse implements RealmModel{
 
         private int selectedOption = -1;
 
-        private int facilityIdOfOptionBlockingFacility;
+        private List<Integer> facilityIdsOfOptionBlockingFacility;
 
         public Facilities(int facilityId, String name, List<Options> options) {
             this.facilityId = facilityId;
@@ -73,12 +74,17 @@ public class ServerResponse implements RealmModel{
             return options;
         }
 
-        public int getFacilityIdOfOptionBlockingFacility() {
-            return facilityIdOfOptionBlockingFacility;
+        public List<Integer> getFacilityIdsOfOptionBlockingFacility() {
+            return facilityIdsOfOptionBlockingFacility;
         }
 
-        public void setFacilityIdOfOptionBlockingFacility(int facilityIdOfOptionBlockingFacility) {
-            this.facilityIdOfOptionBlockingFacility = facilityIdOfOptionBlockingFacility;
+        public void addBlockingFacilityId(int blockingFacilityId) {
+            if(facilityIdsOfOptionBlockingFacility == null) {
+                facilityIdsOfOptionBlockingFacility = new ArrayList<>();
+            }
+            if(!facilityIdsOfOptionBlockingFacility.contains(blockingFacilityId)) {
+                facilityIdsOfOptionBlockingFacility.add(blockingFacilityId);
+            }
         }
 
         public static class Options {
