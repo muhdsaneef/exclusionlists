@@ -4,6 +4,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.example.assignmentradius.api.RetrofitHelper;
+import com.example.assignmentradius.models.FacilityModel;
+import com.example.assignmentradius.models.OptionModel;
 import com.example.assignmentradius.models.ServerResponse;
 
 import java.util.List;
@@ -54,25 +56,17 @@ public class AppRepository {
     }
 
     private void writeResponseToDatabase(ServerResponse serverResponse) {
-        // Persist your data in a transaction
-        realm.beginTransaction();
-        ServerResponse serverResponseObject = realm.copyToRealm(serverResponse); // Create managed objects directly
-        realm.commitTransaction();
-    }
-
-    public void storeFacilitiesList(final List<ServerResponse.Facilities> facilities) {
-        try(Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    ServerResponse serverResponseObj = new ServerResponse(); // <-- create unmanaged
-                    RealmList<ServerResponse.Facilities> facilitiesList = new RealmList<>();
-                    facilitiesList.addAll(facilities);
-                    serverResponseObj.setFacilities(facilitiesList);
-                    serverResponseObj.setId("facilities");
-                    realm.insert(serverResponseObj); // <-- insert unmanaged to Realm
-                }
-            });
+        if(serverResponse.getFacilities() != null && !serverResponse.getFacilities().isEmpty()) {
+            for(ServerResponse.Facilities facility : serverResponse.getFacilities()) {
+                // Persist your data in a transaction
+                realm.beginTransaction();
+                FacilityModel facilityModel = realm.createObject(FacilityModel.class);
+                facilityModel.setFacilityId(facility.getFacilityId());
+                facilityModel.setName(facility.getName());
+                List<ServerResponse.Facilities.Options> options = facility.getOptions();
+                facilityModel.setOptions(new RealmList<>(options.toArray(new OptionModel[options.size()])));
+                realm.commitTransaction();
+            }
         }
     }
 }

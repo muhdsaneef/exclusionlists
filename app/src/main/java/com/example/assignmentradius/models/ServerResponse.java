@@ -12,50 +12,39 @@ import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.RealmClass;
 import io.realm.annotations.Required;
 
-public class ServerResponse extends RealmObject {
+public class ServerResponse {
     @SerializedName("facilities")
-    private RealmList<Facilities> facilities;
+    private List<Facilities> facilities;
 
     @SerializedName("exclusions")
-    private RealmList<RealmList<Exclusions>> exclusions;
-
-    @Required
-    @PrimaryKey
-    private String id;
+    private List<List<Exclusions>> exclusions;
 
     public ServerResponse() {
     }
 
-    public ServerResponse(RealmList<Facilities> facilities, RealmList<RealmList<Exclusions>> exclusions) {
+    public ServerResponse(List<Facilities> facilities, List<List<Exclusions>> exclusions) {
         this.facilities = facilities;
         this.exclusions = exclusions;
     }
 
-    public RealmList<Facilities> getFacilities() {
+    public List<Facilities> getFacilities() {
         return facilities;
     }
 
-    public void setFacilities(RealmList<Facilities> facilities) {
+    public void setFacilities(List<Facilities> facilities) {
         this.facilities = facilities;
     }
 
-    public RealmList<RealmList<Exclusions>> getExclusions() {
+    public List<List<Exclusions>> getExclusions() {
         return exclusions;
     }
 
-    public void setExclusions(RealmList<RealmList<Exclusions>> exclusions) {
+    public void setExclusions(List<List<Exclusions>> exclusions) {
         this.exclusions = exclusions;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public static class Facilities extends RealmObject{
+    public static class Facilities {
         @SerializedName("facility_id")
         private final int facilityId;
 
@@ -63,13 +52,13 @@ public class ServerResponse extends RealmObject {
         private final String name;
 
         @SerializedName("options")
-        private final List<Options> options;
+        private final List<OptionModel> options;
 
         private int selectedOption = -1;
 
         private List<Integer> facilityIdsOfOptionBlockingFacility;
 
-        public Facilities(int facilityId, String name, List<Options> options) {
+        public Facilities(int facilityId, String name, List<OptionModel> options) {
             this.facilityId = facilityId;
             this.name = name;
             this.options = options;
@@ -83,7 +72,7 @@ public class ServerResponse extends RealmObject {
             return name;
         }
 
-        public List<Options> getOptions() {
+        public List<OptionModel> getOptions() {
             return options;
         }
 
@@ -100,45 +89,6 @@ public class ServerResponse extends RealmObject {
             }
         }
 
-        public static class Options extends RealmObject{
-            @SerializedName("name")
-            private final String name;
-
-            @SerializedName("icon")
-            private final String icon;
-
-            @SerializedName("id")
-            private final int id;
-
-            private boolean isOptionDisabled;
-
-            public Options(String name, String icon, int id) {
-                this.name = name;
-                this.icon = icon;
-                this.id = id;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public String getIcon() {
-                return icon;
-            }
-
-            public int getId() {
-                return id;
-            }
-
-            public boolean isOptionDisabled() {
-                return isOptionDisabled;
-            }
-
-            public void setOptionDisabled(boolean optionEnabled) {
-                isOptionDisabled = optionEnabled;
-            }
-        }
-
         public int getSelectedOption() {
             return selectedOption;
         }
@@ -149,7 +99,7 @@ public class ServerResponse extends RealmObject {
 
         public void enableAllOptions() {
             if(options != null) {
-                for (Options option : options) {
+                for (OptionModel option : options) {
                     option.setOptionDisabled(false);
                 }
             }
@@ -157,7 +107,7 @@ public class ServerResponse extends RealmObject {
 
         public void disableOption(int optionID) {
             if(options != null) {
-                for (Options option : options) {
+                for (OptionModel option : options) {
                     if(option.getId() == optionID) {
                         option.setOptionDisabled(true);
                         break;
@@ -168,8 +118,7 @@ public class ServerResponse extends RealmObject {
 
     }
 
-    @RealmClass
-    public static class Exclusions implements RealmModel {
+    public static class Exclusions {
         @SerializedName("facility_id")
         private final int facilityId;
 
