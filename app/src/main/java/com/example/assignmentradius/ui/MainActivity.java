@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.example.assignmentradius.R;
 import com.example.assignmentradius.adapters.FacilitiesAdapter;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewModel.getServerResponse().observe(this, serverResponse -> {
             if(serverResponse != null) {
+                binding.progressBar.setVisibility(View.GONE);
                 setResponseToList(serverResponse);
             }
         });
