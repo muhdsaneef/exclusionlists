@@ -33,7 +33,7 @@ public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_facility, null, false);
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_facility, viewGroup, false);
         return new ViewHolder(itemView);
     }
 
@@ -109,12 +109,14 @@ public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.Vi
      * Check if the options of a facility is blocked by facilities other than the current facility
      * @param facilityId The id of the current facility
      * @param facility The facility of which the options should be enabled
-     * @return
+     * @return If yes, the facility option is blocked by other facilities
      */
     private boolean checkForBlockByOtherFacilities(int facilityId, FacilityModel facility) {
         List<Integer> blockingFacilityIds = facility.getFacilityIdsOfOptionBlockingFacility();
         if(blockingFacilityIds != null) {
+            //Remove the current facility from the blocked facility list
             blockingFacilityIds.remove(Integer.valueOf(facilityId));
+            //Check if there are other facilities which block the given facility option
             return blockingFacilityIds.size() > 0;
         } else {
             return false;
@@ -125,7 +127,7 @@ public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.Vi
      * Check if the facility is in exclusion list
      * @param facilityId The id of the current facility
      * @param tempExclusionsList The exclusion list which might contain the facility
-     * @return
+     * @return The object containing the exclusion condition of the facility of the given facilityId
      */
     private ExclusionEntityModel checkIfFacilityPresentInExclusion(int facilityId, List<ExclusionEntityModel> tempExclusionsList) {
         for(ExclusionEntityModel exclusions : tempExclusionsList) {
@@ -138,8 +140,8 @@ public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.Vi
 
     /**
      * Get the facility from the facilities list by id
-     * @param facilityId
-     * @return
+     * @param facilityId The facility id
+     * @return A valid facility object it is present
      */
     private FacilityModel getFacilityById(int facilityId) {
         for(FacilityModel facilityObj : facilities) {
