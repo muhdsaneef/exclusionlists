@@ -1,27 +1,16 @@
 package com.example.assignmentradius.models;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.RealmList;
-import io.realm.RealmModel;
-import io.realm.RealmObject;
-import io.realm.annotations.Ignore;
-import io.realm.annotations.PrimaryKey;
-import io.realm.annotations.RealmClass;
-import io.realm.annotations.Required;
 
 public class ServerResponse {
     private List<FacilityModel> facilities;
 
-    private List<Exclusions> exclusions;
+    private List<List<ExclusionEntityModel>> exclusions;
 
     public ServerResponse() {
     }
 
-    public ServerResponse(List<FacilityModel> facilities, List<Exclusions> exclusions) {
+    public ServerResponse(List<FacilityModel> facilities, List<List<ExclusionEntityModel>> exclusions) {
         this.facilities = facilities;
         this.exclusions = exclusions;
     }
@@ -34,11 +23,11 @@ public class ServerResponse {
         this.facilities = facilities;
     }
 
-    public List<Exclusions> getExclusions() {
+    public List<List<ExclusionEntityModel>> getExclusions() {
         return exclusions;
     }
 
-    public void setExclusions(List<Exclusions> exclusions) {
+    public void setExclusions(List<List<ExclusionEntityModel>> exclusions) {
         this.exclusions = exclusions;
     }
 }

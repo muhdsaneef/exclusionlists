@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.example.assignmentradius.R;
 import com.example.assignmentradius.models.OptionModel;
-import com.example.assignmentradius.models.ServerResponse;
 import com.example.assignmentradius.utils.AppUtils;
 
 import java.util.List;

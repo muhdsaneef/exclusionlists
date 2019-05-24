@@ -1,11 +1,9 @@
 package com.example.assignmentradius.ui;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
@@ -14,10 +12,8 @@ import com.example.assignmentradius.adapters.FacilitiesAdapter;
 import com.example.assignmentradius.databinding.ActivityMainBinding;
 import com.example.assignmentradius.models.FacilityModel;
 import com.example.assignmentradius.models.ServerResponse;
-import com.example.assignmentradius.utils.AppUtils;
 import com.example.assignmentradius.viewmodel.ApiViewModel;
 
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {

@@ -9,18 +9,15 @@ import android.view.ViewGroup;
 
 import com.example.assignmentradius.R;
 import com.example.assignmentradius.models.ExclusionEntityModel;
-import com.example.assignmentradius.models.Exclusions;
 import com.example.assignmentradius.models.FacilityModel;
-import com.example.assignmentradius.models.ServerResponse;
 import com.example.assignmentradius.ui.widgets.CustomChoiceWidget;
-import com.example.assignmentradius.viewmodel.ApiViewModel;
 
 import java.util.List;
 
 public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.ViewHolder> {
 
     private List<FacilityModel> facilities;
-    private List<Exclusions> exclusionsList;
+    private List<List<ExclusionEntityModel>> exclusionsList;
     private Context context;
 
     public FacilitiesAdapter(Context context, List<FacilityModel> facilities) {
@@ -29,7 +26,7 @@ public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.Vi
 
     }
 
-    public void setExclusionsList(List<Exclusions> exclusionsList) {
+    public void setExclusionsList(List<List<ExclusionEntityModel>> exclusionsList) {
         this.exclusionsList = exclusionsList;
     }
 
@@ -70,17 +67,19 @@ public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.Vi
     }
 
     private void checkForExclusions(ExclusionEntityModel exclusion) {
-        for(Exclusions exclusions : exclusionsList) {
-            ExclusionEntityModel tempExclusionObj = checkIfFacilityPresentInExclusion(exclusion.getFacilityId(), exclusions);
-            if(tempExclusionObj != null) {
-                if(tempExclusionObj.getOptionsId() != exclusion.getOptionsId()) {
-                    changeStatusOfFacilityOptions(tempExclusionObj.getFacilityId(), exclusions, true);
-                } else {
-                    changeStatusOfFacilityOptions(tempExclusionObj.getFacilityId(), exclusions, false);
+        if(exclusionsList != null && !exclusionsList.isEmpty()) {
+            for(List<ExclusionEntityModel> exclusions : exclusionsList) {
+                ExclusionEntityModel tempExclusionObj = checkIfFacilityPresentInExclusion(exclusion.getFacilityId(), exclusions);
+                if(tempExclusionObj != null) {
+                    if(tempExclusionObj.getOptionsId() != exclusion.getOptionsId()) {
+                        changeStatusOfFacilityOptions(tempExclusionObj.getFacilityId(), exclusions, true);
+                    } else {
+                        changeStatusOfFacilityOptions(tempExclusionObj.getFacilityId(), exclusions, false);
+                    }
                 }
             }
+            notifyDataSetChanged();
         }
-        notifyDataSetChanged();
     }
 
     /**
@@ -88,8 +87,8 @@ public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.Vi
      * @param facilityId The id of the current selected facility
      * @param exclusions The exclusion list in which the current selected facility is present
      */
-    private void changeStatusOfFacilityOptions(int facilityId, Exclusions exclusions, boolean enableOption) {
-        for(ExclusionEntityModel exclusionObj : exclusions.getExclusions()) {
+    private void changeStatusOfFacilityOptions(int facilityId, List<ExclusionEntityModel> exclusions, boolean enableOption) {
+        for(ExclusionEntityModel exclusionObj : exclusions) {
             if(facilityId != exclusionObj.getFacilityId()) {
                 FacilityModel facility = getFacilityById(exclusionObj.getFacilityId());
                 if(facility != null) {
@@ -128,8 +127,8 @@ public class FacilitiesAdapter extends RecyclerView.Adapter<FacilitiesAdapter.Vi
      * @param tempExclusionsList The exclusion list which might contain the facility
      * @return
      */
-    private ExclusionEntityModel checkIfFacilityPresentInExclusion(int facilityId, Exclusions tempExclusionsList) {
-        for(ExclusionEntityModel exclusions : tempExclusionsList.getExclusions()) {
+    private ExclusionEntityModel checkIfFacilityPresentInExclusion(int facilityId, List<ExclusionEntityModel> tempExclusionsList) {
+        for(ExclusionEntityModel exclusions : tempExclusionsList) {
             if(facilityId == exclusions.getFacilityId()) {
                 return exclusions;
             }

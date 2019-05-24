@@ -1,7 +1,6 @@
 package com.example.assignmentradius.api;
 
 import com.example.assignmentradius.constants.ApiConstants;
-import com.google.gson.GsonBuilder;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
