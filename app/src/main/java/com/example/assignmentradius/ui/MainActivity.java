@@ -12,9 +12,12 @@ import android.view.View;
 import com.example.assignmentradius.R;
 import com.example.assignmentradius.adapters.FacilitiesAdapter;
 import com.example.assignmentradius.databinding.ActivityMainBinding;
+import com.example.assignmentradius.models.FacilityModel;
 import com.example.assignmentradius.models.ServerResponse;
+import com.example.assignmentradius.utils.AppUtils;
 import com.example.assignmentradius.viewmodel.ApiViewModel;
 
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,9 +51,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setResponseToList(ServerResponse serverResponse) {
-        List<ServerResponse.Facilities> facilities = serverResponse.getFacilities();
+        List<FacilityModel> facilities = serverResponse.getFacilities();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        FacilitiesAdapter adapter = new FacilitiesAdapter(this, facilities, viewModel);
+        FacilitiesAdapter adapter = new FacilitiesAdapter(this, facilities);
         adapter.setExclusionsList(serverResponse.getExclusions());
         binding.rvSelectionList.setLayoutManager(layoutManager);
         binding.rvSelectionList.setAdapter(adapter);

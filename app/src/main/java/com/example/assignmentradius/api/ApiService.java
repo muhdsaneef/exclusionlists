@@ -7,7 +7,7 @@ import retrofit2.http.GET;
 
 public interface ApiService {
 
-    @GET("https://my-json-server.typicode.com/iranjith4/ad-assignment/db")
-    public Call<ServerResponse> getApiResponse();
+    @GET("iranjith4/ad-assignment/db")
+    Call<ServerResponse> getApiResponse();
 
 }

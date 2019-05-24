@@ -13,27 +13,16 @@ import java.util.Map;
 
 public class ApiViewModel extends ViewModel {
     private MutableLiveData<ServerResponse> serverResponse;
-    private AppRepository repository;
-    private SparseIntArray facilitiesOptionSelections;
 
     public void init(){
-        if (serverResponse != null){
+        if (serverResponse != null) {
             return;
         }
-        if(facilitiesOptionSelections == null) {
-            facilitiesOptionSelections = new SparseIntArray();
-        }
-        repository = AppRepository.getInstance();
+        AppRepository repository = AppRepository.getInstance();
         serverResponse = repository.getServerResponse();
     }
 
     public MutableLiveData<ServerResponse> getServerResponse() {
         return serverResponse;
     }
-
-    public void addOptionSelection(int facilityId, int optionId) {
-        facilitiesOptionSelections.put(facilityId, optionId);
-    }
-
-
 }

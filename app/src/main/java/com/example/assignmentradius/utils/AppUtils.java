@@ -3,6 +3,10 @@ package com.example.assignmentradius.utils;
 import com.example.assignmentradius.R;
 import com.example.assignmentradius.constants.AppConstants;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class AppUtils {
 
     public static int getIconResourceId(String iconName) {
@@ -37,5 +41,11 @@ public class AppUtils {
                 break;
         }
         return resID;
+    }
+
+    public static String getTimestamp(long timestamp, Date date) {
+        date.setTime(timestamp);
+        SimpleDateFormat formatter = new SimpleDateFormat(AppConstants.TIMESTAMP_FORMAT, Locale.getDefault());
+        return formatter.format(date);
     }
 }

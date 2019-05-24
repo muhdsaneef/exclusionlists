@@ -16,4 +16,7 @@ public class AppConstants {
     //DB
     public static final String DB_NAME = "demo.realm";
     public static final int DB_SCHEMA_VERSION = 0;
+
+    //Timestamp format
+    public static final String TIMESTAMP_FORMAT = "yyyyMMdd";
 }
