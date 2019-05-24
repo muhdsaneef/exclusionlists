@@ -91,33 +91,30 @@ public class AppRepository {
     }
 
     private void clearDatabase() {
-        realm.beginTransaction();
-        realm.deleteAll();
-        realm.commitTransaction();
+        realm.executeTransaction(realm -> realm.deleteAll());
     }
 
     private void writeResponseToDatabase(ServerResponse serverResponse) {
         realm = Realm.getDefaultInstance();
         clearDatabase();
-        realm.beginTransaction();
+        realm.executeTransaction(realm -> {
+            DatabaseUpdateModel databaseUpdateModel = new DatabaseUpdateModel();
+            databaseUpdateModel.setTimestamp(AppUtils.getTimestamp(System.currentTimeMillis(), new Date()));
+            realm.copyToRealm(databaseUpdateModel);
 
-        DatabaseUpdateModel databaseUpdateModel = new DatabaseUpdateModel();
-        databaseUpdateModel.setTimestamp(AppUtils.getTimestamp(System.currentTimeMillis(), new Date()));
-        DatabaseUpdateModel databaseUpdateObject = realm.copyToRealm(databaseUpdateModel);
-
-        if(serverResponse.getFacilities() != null && !serverResponse.getFacilities().isEmpty()) {
-            realm.insert(serverResponse.getFacilities());
-        }
-
-        if(serverResponse.getExclusions() != null && !serverResponse.getExclusions().isEmpty()) {
-            for(List<ExclusionEntityModel> exclusionEntityModels : serverResponse.getExclusions()) {
-                Exclusions unManagedExclusion = new Exclusions();
-                unManagedExclusion.setId(UUID.randomUUID().toString());
-                unManagedExclusion.setExclusions(new RealmList<>(exclusionEntityModels.toArray(new ExclusionEntityModel[0])));
-                Exclusions managedExclusions = realm.copyToRealm(unManagedExclusion);
+            if(serverResponse.getFacilities() != null && !serverResponse.getFacilities().isEmpty()) {
+                realm.insert(serverResponse.getFacilities());
             }
-        }
-        realm.commitTransaction();
+
+            if(serverResponse.getExclusions() != null && !serverResponse.getExclusions().isEmpty()) {
+                for(List<ExclusionEntityModel> exclusionEntityModels : serverResponse.getExclusions()) {
+                    Exclusions unManagedExclusion = new Exclusions();
+                    unManagedExclusion.setId(UUID.randomUUID().toString());
+                    unManagedExclusion.setExclusions(new RealmList<>(exclusionEntityModels.toArray(new ExclusionEntityModel[0])));
+                    realm.copyToRealm(unManagedExclusion);
+                }
+            }
+        });
         realm.close();
     }
 
